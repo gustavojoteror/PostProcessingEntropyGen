@@ -1,0 +1,8 @@
+src/__init__*
+src/__pycache__
+oldCode/*
+*.png
+DATA/*
+plots/*.png
+plots/F3D/*.png
+plots/Q3D/*.png

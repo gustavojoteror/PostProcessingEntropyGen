@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")            ####### added for MAC
 from matplotlib import pyplot as plt
-matplotlib.rcParams.update({'font.size': 14})
+matplotlib.rcParams.update({'font.size': 16})
 matplotlib.rcParams['figure.figsize'] = [8,10]
 
 from src.IO import ReadUserInput
@@ -22,6 +22,14 @@ if __name__ == "__main__":
 
     speeds = argv[1]
     propName= argv[2]
+
+    sizeArg= len(argv)
+    if sizeArg>3:
+        legendON=1
+    else:
+        legendON=0
+
+
 
     DIR         = os.getcwd()+'/'
     INFile      = DIR+'param.in'
@@ -79,7 +87,7 @@ if __name__ == "__main__":
         elif propName=='s_v' or propName=='s_g':
             if Integrate == 1:
                 entropy[0]= 0
-                entropy[1]= 1500
+                entropy[1]=  2000 #1500
             else:
                 entropy[0]= 0
                 entropy[1]= 3800000 #1200000
@@ -142,28 +150,32 @@ if __name__ == "__main__":
     plt.xlim(min(radius),max(radius))
     plt.ylim(entropy[0],entropy[1])
 
-    plt.title(speeds, fontsize=16)
-    #plt.legend((typeNumDom[0], "{0} whole span".format(typeNumDom[i]), "{0} mid-span".format(typeNumDom[i])))
+    #plt.title(speeds, fontsize=16)
+    if legendON==1:
+        plt.legend((typeNumDom[0], "{0} whole span".format(typeNumDom[i]), "{0} mid-span".format(typeNumDom[i])))
     title = "Shaft speed: {0}".format(speeds)
-    plt.title(title)
+    #plt.title(title)
 
 
-    plt.xlabel('Scaled radius, R/R$_{S/R} [-]$', fontsize=16)
+    plt.xlabel('Scaled radius, R/R$_{S/R} [-]$', fontsize=18)
     if typeAVG=='Vol':
         lableee = "Accumulated entropy generation (volume averaged), ${0} [W/m^3 K]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
     elif typeAVG=='Mass':
         lableee = "Accumulated rate of entropy generation (mass averaged), ${0} [W/m^3 K]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
 
     if propName=='Be':
         lableee = "Bejan number, ${0} [-]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
 
 
 
     if savefig==1:
-        file = "{0}_{1}.png".format(propName, speeds)
+        if legendON==1:
+            file = "newPaperPlots/{0}_{1}_numDomain_leg.png".format(propName, speeds)
+        else:
+            file = "newPaperPlots/{0}_{1}_numDomain.png".format(propName, speeds)
         plt.savefig(file)
         print('imaged stored: ', file)
 

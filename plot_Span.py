@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use("TkAgg")            ####### added for MAC
 from matplotlib import pyplot as plt
 import matplotlib.ticker as mtick
-matplotlib.rcParams.update({'font.size': 14})
+matplotlib.rcParams.update({'font.size': 16})
 matplotlib.rcParams['figure.figsize'] = [8,10]
 
 from src.IO import ReadUserInput
@@ -18,11 +18,18 @@ from src.point import Point
 
 
 if __name__ == "__main__":
-    """Plot function to compared Q3D and 3D e.g. 'python plot_numDoamin.py XXXXX' where XXX is the case to be plotted"""
+    """Plot function to compared Q3D and 3D e.g. 'python plot_Span.py speed propName' where XXX is the case to be plotted"""
 
 
     speed = argv[1]
     propName= argv[2]
+
+    sizeArg= len(argv)
+    if sizeArg>3:
+        legendON=1
+    else:
+        legendON=0
+
 
     DIR         = os.getcwd()+'/'
     INFile      = DIR+'param.in'
@@ -137,26 +144,31 @@ if __name__ == "__main__":
     plt.ylim(entropy[0],entropy[1])
 
 
-    plt.xlabel('Scaled radius, R/R$_{S/R} [-]$', fontsize=16)
+    plt.xlabel('Scaled radius, R/R$_{S/R} [-]$', fontsize=18)
     if typeAVG=='Vol':
         lableee = "Accumulated rate of entropy generation (volume averaged), ${0} [W/m^3 K]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
     elif typeAVG=='Mass':
         lableee = "Accumulated rate of entropy generation (mass averaged), ${0} [W/m^3 K]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
 
     if propName=='Be':
         lableee = "Bejan number, ${0} [-]$".format(propName)
-        plt.ylabel(lableee, fontsize=16)
+        plt.ylabel(lableee, fontsize=18)
 
     # ax.set_yscale('log')
-    #plt.legend(('hub', 'mid-span', 'shroud')) #, span[3]))
-    title = "Shaft speed: {0}".format(speed)
-    plt.title(title)
+    if legendON==1:
+        plt.legend(('hub', 'mid-span', 'shroud')) #, span[3]))
+    #title = "Shaft speed: {0}".format(speed)
+    #plt.title(title)
     #ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1e'))
     if savefig==1:
 
-        file = "DATA/{0}/{1}_{2}_{3}.png".format(typeNumDom, propName, typeAVG,speed)
+
+        if legendON==1:
+            file = "newPaperPlots/{1}_{2}_{3}_Span_leg.png".format(typeNumDom, propName, typeAVG,speed) #"DATA/{0}/{1}_{2}_{3}_leg.png".format(typeNumDom, propName, typeAVG,speed)
+        else:
+            file = "newPaperPlots/{1}_{2}_{3}_Span.png".format(typeNumDom, propName, typeAVG,speed) #"DATA/{0}/{1}_{2}_{3}.png".format(typeNumDom, propName, typeAVG,speed)
         plt.savefig(file)
         print('imaged stored: ', file)
 
